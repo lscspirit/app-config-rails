@@ -34,6 +34,8 @@ module AppConfigRails
           cfg_map.merge override_map
         rescue InvalidConfigKey => ex
           raise InvalidConfigFile, "config key error '#{local_override_path}': #{ex.message}"
+        rescue Errno::ENOENT
+          # ignore file not exists error as local_override file is optional
         end
       end
 
