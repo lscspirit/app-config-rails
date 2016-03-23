@@ -2,7 +2,7 @@ module AppConfigRails
   class Loader
     def initialize(config)
       @config = config
-      @parser = Parser.new
+      @parser = Parser.new @config.use_domain
 
       raise 'Environement is not set in AppConfigRails::Config' unless @config.env
     end
