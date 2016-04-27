@@ -17,7 +17,7 @@ module AppConfigRails
       expanded_paths.each do |path|
         begin
           raw_entries = parse_yml path
-          raw_entries.each { |e| cfg_map << e }
+          raw_entries.each { |e| cfg_map << e if e.applicable? @config.env, @config.domain }
         rescue InvalidConfigKey => ex
           raise InvalidConfigFile, "config key error '#{path}': #{ex.message}"
         end
@@ -28,7 +28,7 @@ module AppConfigRails
 
         begin
           override_entries = parse_yml override_path
-          override_entries.each { |e| override_map.add e, true }
+          override_entries.each { |e| override_map.add(e, true) if e.applicable? @config.env, @config.domain }
 
           # merges the override entries into the main config map
           cfg_map.merge override_map

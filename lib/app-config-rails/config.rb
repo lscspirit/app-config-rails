@@ -9,9 +9,14 @@ module AppConfigRails
     def use_domain
       @use_domain === true
     end
+    alias_method :use_domain?, :use_domain
 
     def use_domain=(use)
       @use_domain = !!use
+    end
+
+    def domain
+      use_domain? ? @domain : nil
     end
   end
 end
