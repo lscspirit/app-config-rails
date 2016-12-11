@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe AppConfigRails::ConfigEntry do
+RSpec.describe AppConfigLoader::ConfigEntry do
   describe '#applicable?' do
     let(:result) { entry.applicable?(*params) }
 

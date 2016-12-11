@@ -1,4 +1,4 @@
-module AppConfigRails
+module AppConfigLoader
   class ConfigEntry
     attr_reader :env, :domain, :key_components, :value
 

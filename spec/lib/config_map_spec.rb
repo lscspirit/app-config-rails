@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe AppConfigRails::ConfigMap do
+RSpec.describe AppConfigLoader::ConfigMap do
   let(:map) { described_class.new }
 
   describe '#add' do
@@ -14,7 +14,7 @@ RSpec.describe AppConfigRails::ConfigMap do
       end
 
       context 'and the entry uses a brand new key' do
-        let(:new_entry) { AppConfigRails::ConfigEntry.new 'prod.service_one', 'value_one' }
+        let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.service_one', 'value_one' }
 
         it 'adds the entry into the key map' do
           expect(key_map[:service_one]).to eq(new_entry)
@@ -22,9 +22,9 @@ RSpec.describe AppConfigRails::ConfigMap do
       end
 
       context 'and the entry (less specific) uses an existing key' do
-        let(:existing) { AppConfigRails::ConfigEntry.new 'prod.service_one', 'original_value' }
+        let(:existing) { AppConfigLoader::ConfigEntry.new 'prod.service_one', 'original_value' }
         let(:existing_map) { { service_one: existing } }
-        let(:new_entry) { AppConfigRails::ConfigEntry.new '*.service_one', 'new_value' }
+        let(:new_entry) { AppConfigLoader::ConfigEntry.new '*.service_one', 'new_value' }
 
         it 'does not change the entry into the key map' do
           expect(key_map[:service_one]).to eq(existing)
@@ -32,9 +32,9 @@ RSpec.describe AppConfigRails::ConfigMap do
       end
 
       context 'and the entry (same specificity) uses an existing key' do
-        let(:existing) { AppConfigRails::ConfigEntry.new 'prod.service_one', 'original_value' }
+        let(:existing) { AppConfigLoader::ConfigEntry.new 'prod.service_one', 'original_value' }
         let(:existing_map) { { service_one: existing } }
-        let(:new_entry) { AppConfigRails::ConfigEntry.new 'prod.service_one', 'new_value' }
+        let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.service_one', 'new_value' }
 
         it 'adds the entry into the key map' do
           expect(key_map[:service_one]).to eq(new_entry)
@@ -42,9 +42,9 @@ RSpec.describe AppConfigRails::ConfigMap do
       end
 
       context 'and the entry (greater specificity) uses an existing key' do
-        let(:existing) { AppConfigRails::ConfigEntry.new '*.service_one', 'original_value' }
+        let(:existing) { AppConfigLoader::ConfigEntry.new '*.service_one', 'original_value' }
         let(:existing_map) { { service_one: existing } }
-        let(:new_entry) { AppConfigRails::ConfigEntry.new 'prod.service_one', 'new_value' }
+        let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.service_one', 'new_value' }
 
         it 'adds the entry into the key map' do
           expect(key_map[:service_one]).to eq(new_entry)
@@ -59,7 +59,7 @@ RSpec.describe AppConfigRails::ConfigMap do
       end
 
       context 'and the entry uses a brand new key' do
-        let(:new_entry) { AppConfigRails::ConfigEntry.new 'prod.service_one', 'value_one' }
+        let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.service_one', 'value_one' }
 
         it 'adds the entry into the key map' do
           expect(key_map[:service_one]).to eq(new_entry)
@@ -67,9 +67,9 @@ RSpec.describe AppConfigRails::ConfigMap do
       end
 
       context 'and the entry (less specific) uses an existing key' do
-        let(:existing) { AppConfigRails::ConfigEntry.new 'prod.service_one', 'original_value' }
+        let(:existing) { AppConfigLoader::ConfigEntry.new 'prod.service_one', 'original_value' }
         let(:existing_map) { { service_one: existing } }
-        let(:new_entry) { AppConfigRails::ConfigEntry.new '*.service_one', 'new_value' }
+        let(:new_entry) { AppConfigLoader::ConfigEntry.new '*.service_one', 'new_value' }
 
         it 'does not change the entry into the key map' do
           expect(key_map[:service_one]).to eq(new_entry)
@@ -77,9 +77,9 @@ RSpec.describe AppConfigRails::ConfigMap do
       end
 
       context 'and the entry (same specificity) uses an existing key' do
-        let(:existing) { AppConfigRails::ConfigEntry.new 'prod.service_one', 'original_value' }
+        let(:existing) { AppConfigLoader::ConfigEntry.new 'prod.service_one', 'original_value' }
         let(:existing_map) { { service_one: existing } }
-        let(:new_entry) { AppConfigRails::ConfigEntry.new 'prod.service_one', 'new_value' }
+        let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.service_one', 'new_value' }
 
         it 'adds the entry into the key map' do
           expect(key_map[:service_one]).to eq(new_entry)
@@ -87,9 +87,9 @@ RSpec.describe AppConfigRails::ConfigMap do
       end
 
       context 'and the entry (greater specificity) uses an existing key' do
-        let(:existing) { AppConfigRails::ConfigEntry.new '*.service_one', 'original_value' }
+        let(:existing) { AppConfigLoader::ConfigEntry.new '*.service_one', 'original_value' }
         let(:existing_map) { { service_one: existing } }
-        let(:new_entry) { AppConfigRails::ConfigEntry.new 'prod.service_one', 'new_value' }
+        let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.service_one', 'new_value' }
 
         it 'adds the entry into the key map' do
           expect(key_map[:service_one]).to eq(new_entry)
@@ -104,7 +104,7 @@ RSpec.describe AppConfigRails::ConfigMap do
       end
 
       context 'and the entry uses a brand new key' do
-        let(:new_entry) { AppConfigRails::ConfigEntry.new 'prod.hk.service_one', 'value_one', true }
+        let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.hk.service_one', 'value_one', true }
 
         it 'adds the entry into the key map' do
           expect(key_map[:service_one]).to eq(new_entry)
@@ -112,9 +112,9 @@ RSpec.describe AppConfigRails::ConfigMap do
       end
 
       context 'and the entry (less specific) uses an existing key' do
-        let(:existing) { AppConfigRails::ConfigEntry.new 'prod.hk.service_one', 'original_value', true }
+        let(:existing) { AppConfigLoader::ConfigEntry.new 'prod.hk.service_one', 'original_value', true }
         let(:existing_map) { { service_one: existing } }
-        let(:new_entry) { AppConfigRails::ConfigEntry.new 'prod.*.service_one', 'new_value', true }
+        let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.*.service_one', 'new_value', true }
 
         it 'does not change the entry into the key map' do
           expect(key_map[:service_one]).to eq(existing)
@@ -122,9 +122,9 @@ RSpec.describe AppConfigRails::ConfigMap do
       end
 
       context 'and the entry (same specificity) uses an existing key' do
-        let(:existing) { AppConfigRails::ConfigEntry.new 'prod.hk.service_one', 'original_value', true }
+        let(:existing) { AppConfigLoader::ConfigEntry.new 'prod.hk.service_one', 'original_value', true }
         let(:existing_map) { { service_one: existing } }
-        let(:new_entry) { AppConfigRails::ConfigEntry.new 'prod.hk.service_one', 'new_value', true }
+        let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.hk.service_one', 'new_value', true }
 
         it 'adds the entry into the key map' do
           expect(key_map[:service_one]).to eq(new_entry)
@@ -132,9 +132,9 @@ RSpec.describe AppConfigRails::ConfigMap do
       end
 
       context 'and the entry (greater specificity) uses an existing key' do
-        let(:existing) { AppConfigRails::ConfigEntry.new 'prod.*.service_one', 'original_value', true }
+        let(:existing) { AppConfigLoader::ConfigEntry.new 'prod.*.service_one', 'original_value', true }
         let(:existing_map) { { service_one: existing } }
-        let(:new_entry) { AppConfigRails::ConfigEntry.new 'prod.hk.service_one', 'new_value', true }
+        let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.hk.service_one', 'new_value', true }
 
         it 'adds the entry into the key map' do
           expect(key_map[:service_one]).to eq(new_entry)
@@ -150,22 +150,22 @@ RSpec.describe AppConfigRails::ConfigMap do
       end
 
       context 'that already have child config' do
-        let(:existing) { AppConfigRails::ConfigEntry.new 'prod.level_one.level_two', 'original_value' }
+        let(:existing) { AppConfigLoader::ConfigEntry.new 'prod.level_one.level_two', 'original_value' }
         let(:existing_map) { { level_one: { level_two: existing } } }
-        let(:new_entry) { AppConfigRails::ConfigEntry.new 'prod.level_one', 'new_value' }
+        let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.level_one', 'new_value' }
 
         it 'raises ConfigKeyConflict error' do
-          expect { call_add }.to raise_error(AppConfigRails::ConfigKeyConflict)
+          expect { call_add }.to raise_error(AppConfigLoader::ConfigKeyConflict)
         end
       end
 
       context 'that already have an entry in the key parent component' do
-        let(:existing) { AppConfigRails::ConfigEntry.new 'prod.level_one.level_two', 'original_value' }
+        let(:existing) { AppConfigLoader::ConfigEntry.new 'prod.level_one.level_two', 'original_value' }
         let(:existing_map) { { level_one: { level_two: existing } } }
-        let(:new_entry) { AppConfigRails::ConfigEntry.new 'prod.level_one.level_two.level_three', 'new_value' }
+        let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.level_one.level_two.level_three', 'new_value' }
 
         it 'raises ConfigKeyConflict error' do
-          expect { call_add }.to raise_error(AppConfigRails::ConfigKeyConflict)
+          expect { call_add }.to raise_error(AppConfigLoader::ConfigKeyConflict)
         end
       end
     end
@@ -179,7 +179,7 @@ RSpec.describe AppConfigRails::ConfigMap do
     end
 
     context 'with a brand new entry' do
-      let(:new_entry) { AppConfigRails::ConfigEntry.new 'prod.service_one', 'value_one' }
+      let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.service_one', 'value_one' }
 
       it 'adds the entry into the key map' do
         expect(key_map[:service_one]).to eq(new_entry)
@@ -291,17 +291,17 @@ RSpec.describe AppConfigRails::ConfigMap do
   describe '#merge' do
     let(:original_map) do
       map = described_class.new
-      map << AppConfigRails::ConfigEntry.new('hk.config_one', 'value_one')
-      map << AppConfigRails::ConfigEntry.new('hk.level_one.level_two.config_two', 'value_two')
-      map << AppConfigRails::ConfigEntry.new('hk.service_one.config_three', 'value_three')
+      map << AppConfigLoader::ConfigEntry.new('hk.config_one', 'value_one')
+      map << AppConfigLoader::ConfigEntry.new('hk.level_one.level_two.config_two', 'value_two')
+      map << AppConfigLoader::ConfigEntry.new('hk.service_one.config_three', 'value_three')
       map
     end
 
     context 'with a target map that has no conflicting key' do
       let(:target_map) do
         map = described_class.new
-        map << AppConfigRails::ConfigEntry.new('hk.config_one', 'new_value_one')
-        map << AppConfigRails::ConfigEntry.new('hk.service_one.config_three', 'new_value_three')
+        map << AppConfigLoader::ConfigEntry.new('hk.config_one', 'new_value_one')
+        map << AppConfigLoader::ConfigEntry.new('hk.service_one.config_three', 'new_value_three')
         map
       end
 
@@ -310,24 +310,24 @@ RSpec.describe AppConfigRails::ConfigMap do
       end
 
       it 'updates the merged entries in the original map' do
-        expect(original_map['config_one']).to eq(AppConfigRails::ConfigEntry.new('hk.config_one', 'new_value_one'))
-        expect(original_map['service_one.config_three']).to eq(AppConfigRails::ConfigEntry.new('hk.service_one.config_three', 'new_value_three'))
+        expect(original_map['config_one']).to eq(AppConfigLoader::ConfigEntry.new('hk.config_one', 'new_value_one'))
+        expect(original_map['service_one.config_three']).to eq(AppConfigLoader::ConfigEntry.new('hk.service_one.config_three', 'new_value_three'))
       end
 
       it 'leaves the unmerged entries untouched' do
-        expect(original_map['level_one.level_two.config_two']).to eq(AppConfigRails::ConfigEntry.new('hk.level_one.level_two.config_two', 'value_two'))
+        expect(original_map['level_one.level_two.config_two']).to eq(AppConfigLoader::ConfigEntry.new('hk.level_one.level_two.config_two', 'value_two'))
       end
     end
 
     context 'with a target map that has conflicting key' do
       let(:target_map) do
         map = described_class.new
-        map << AppConfigRails::ConfigEntry.new('hk.config_one.conflict_one', 'new_value_one')
+        map << AppConfigLoader::ConfigEntry.new('hk.config_one.conflict_one', 'new_value_one')
         map
       end
 
       it 'raises ConfigKeyConflict error' do
-        expect { original_map.merge(target_map) }.to raise_error(AppConfigRails::ConfigKeyConflict)
+        expect { original_map.merge(target_map) }.to raise_error(AppConfigLoader::ConfigKeyConflict)
       end
     end
   end

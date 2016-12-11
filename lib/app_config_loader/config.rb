@@ -1,4 +1,4 @@
-module AppConfigRails
+module AppConfigLoader
   class Config
     attr_accessor :env, :domain, :local_overrides
 

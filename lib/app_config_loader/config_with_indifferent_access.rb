@@ -1,4 +1,4 @@
-module AppConfigRails
+module AppConfigLoader
   class ConfigWithIndifferentAccess
     def initialize(map, prefix = nil)
       @config_map = map

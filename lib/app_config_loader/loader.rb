@@ -1,14 +1,14 @@
-module AppConfigRails
+module AppConfigLoader
   class Loader
     def initialize(config)
       @config = config
       @parser = Parser.new @config.use_domain
 
-      raise 'Environement is not set in AppConfigRails::Config' unless @config.env
+      raise 'Environement is not set in AppConfigLoader::Config' unless @config.env
     end
 
     # Load app config entries from yml paths listed in the
-    # AppConfigRails::Config's 'config_paths' and 'local_override' properties
+    # AppConfigLoader::Config's 'config_paths' and 'local_override' properties
     def load
       cfg_map = ConfigMap.new
 

@@ -1,7 +1,7 @@
 require 'bundler/setup'
 Bundler.setup
 
-require 'app-config-rails'
+require 'app_config_loader'
 require 'faker'
 
 RSpec.configure do |config|

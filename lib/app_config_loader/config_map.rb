@@ -1,4 +1,4 @@
-module AppConfigRails
+module AppConfigLoader
   class ConfigMap
     def initialize
       @key_map = {}

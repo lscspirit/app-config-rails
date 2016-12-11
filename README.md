@@ -1,4 +1,4 @@
-# AppConfigRails
+# AppConfigLoader
 
 A easy way to define application configurations in your Rails environment.
 
@@ -7,7 +7,7 @@ A easy way to define application configurations in your Rails environment.
 Add the following line to your Gemfile:
 
 ```ruby
-gem 'app-config-rails'
+gem 'app_config_loader'
 ```
 
 Run the bundle command to install it.
@@ -24,31 +24,31 @@ Create a YAML file in the default directory `config/app_configs` to put your app
   'host': prod.someservice.com
 ```
 
-Create an initializer `config/initializers/00_app_config.rb` to configure and initialize AppConfigRails. Typically, you would want AppConfigRails to be the first thing to be initialized so that you can access your app config values in the remaining Rails initialization process. This is why the initializer filename has the '00_' prefix.
+Create an initializer `config/initializers/00_app_config.rb` to configure and initialize AppConfigLoader. Typically, you would want AppConfigLoader to be the first thing to be initialized so that you can access your app config values in the remaining Rails initialization process. This is why the initializer filename has the '00_' prefix.
 
 
 ```ruby
 # config/initializers/00_app_config.rb
 
-APP_CONFIG = AppConfigRails.load
+APP_CONFIG = AppConfigLoader.load
 ```
 
 From this point onward, you can access your app config values through `APP_CONFIG`.
 
 ```ruby
-# when AppConfigRails' env is not "production"
+# when AppConfigLoader' env is not "production"
 APP_CONFIG['some_service.host']  # => 'dev.someservice.com'
 
-# when AppConfigRails' env is set to "production"
+# when AppConfigLoader' env is set to "production"
 APP_CONFIG['some_service.host']  # => 'prod.someservice.com'
 ```
 
 ## Configuration
 
-You can configure where and how AppConfigRails load your app config file(s).
+You can configure where and how AppConfigLoader load your app config file(s).
 
 ```ruby
-APP_CONFIG = AppConfigRails.load do |config|
+APP_CONFIG = AppConfigLoader.load do |config|
   config.use_domain = true
   config.domain = 'us'
   config.config_paths << '/path/to/additional_config.yml'
@@ -82,7 +82,7 @@ All app configs are defined as key-value entries in YAML format. A app config va
 'production.some_service.port': 8000
 
 # In Rails
-APP_CONFIG = AppConfigRails.load do |config|
+APP_CONFIG = AppConfigLoader.load do |config|
   config.env = 'test'
 end
 
@@ -90,7 +90,7 @@ APP_CONFIG['timeout']             # => 3000
 APP_CONFIG['some_service.host']   # => dev.someservice.com
 APP_CONFIG['some_service.port']   # => nil
 
-APP_CONFIG = AppConfigRails.load do |config|
+APP_CONFIG = AppConfigLoader.load do |config|
   config.env = 'production'
 end
 
@@ -119,7 +119,7 @@ APP_CONFIG['some_service.port']   # => 8000
 'production.hk.some_service.host': 'prod.someservice.com.hk'
 
 # In Rails
-APP_CONFIG = AppConfigRails.load do |config|
+APP_CONFIG = AppConfigLoader.load do |config|
   config.env = 'production'
   config.use_domain = true
   config.domain     = 'us'
@@ -127,7 +127,7 @@ end
 
 APP_CONFIG['some_service.host']   # => prod.someservice.com
 
-APP_CONFIG = AppConfigRails.load do |config|
+APP_CONFIG = AppConfigLoader.load do |config|
   config.env = 'production'
   config.use_domain = true
   config.domain     = 'hk'
@@ -146,13 +146,13 @@ You may use the wildcard `*` in place of the env and the domain. This allows you
 'production.some_service.host': 'prod.someservice.com'
 
 # In Rails
-APP_CONFIG = AppConfigRails.load do |config|
+APP_CONFIG = AppConfigLoader.load do |config|
   config.env = 'test'
 end
 
 APP_CONFIG['some_service.host']   # => dev.someservice.com
 
-APP_CONFIG = AppConfigRails.load do |config|
+APP_CONFIG = AppConfigLoader.load do |config|
   config.env = 'production'
 end
 
@@ -176,7 +176,7 @@ The local overrides file provides a quick way to override any entries defined in
 
 ## Contributors
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/lscspirit/app-config-rails. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/lscspirit/app_config_loader. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)

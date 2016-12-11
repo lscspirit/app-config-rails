@@ -1,6 +1,6 @@
 require 'yaml'
 
-module AppConfigRails
+module AppConfigLoader
   class Parser
     def initialize(use_domain = false)
       @use_domain = use_domain

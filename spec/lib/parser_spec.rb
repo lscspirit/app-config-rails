@@ -2,15 +2,15 @@ require 'spec_helper'
 
 RSpec::Matchers.define :be_a_config_key_entry do
   match do |actual|
-    actual.is_a? AppConfigRails::ConfigEntry
+    actual.is_a? AppConfigLoader::ConfigEntry
   end
 
   failure_message do |actual|
-    "expected #{actual} to be a AppConfigRails::KeyEntry"
+    "expected #{actual} to be a AppConfigLoader::KeyEntry"
   end
 
   failure_message_when_negated do |actual|
-    "expected #{actual} to not be a AppConfigRails::KeyEntry"
+    "expected #{actual} to not be a AppConfigLoader::KeyEntry"
   end
 end
 
@@ -25,7 +25,7 @@ RSpec::Matchers.define :have_config_key_props do |env, domain, key, value|
   diffable
 end
 
-RSpec.describe AppConfigRails::Parser do
+RSpec.describe AppConfigLoader::Parser do
   describe '#parse' do
     let(:parser) { described_class.new }
     let(:result) { parser.parse(cfg_yml) }
@@ -185,7 +185,7 @@ RSpec.describe AppConfigRails::Parser do
       end
 
       it 'raises an InvalidConfigKey error' do
-        expect { result }.to raise_error AppConfigRails::InvalidConfigKey
+        expect { result }.to raise_error AppConfigLoader::InvalidConfigKey
       end
     end
 
@@ -293,7 +293,7 @@ RSpec.describe AppConfigRails::Parser do
         end
 
         it 'raises an InvalidConfigKey error' do
-          expect { result }.to raise_error AppConfigRails::InvalidConfigKey
+          expect { result }.to raise_error AppConfigLoader::InvalidConfigKey
         end
       end
     end
