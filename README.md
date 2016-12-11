@@ -1,6 +1,6 @@
 # AppConfigLoader
 
-A easy way to define application configurations in your Rails environment.
+A easy way to define application configurations using YAML in your Rails environment.
 
 ## Getting Started
 
