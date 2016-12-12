@@ -8,6 +8,8 @@
 /spec/reports/
 /tmp/
 
+/builds
+
 # rbenv
 .ruby-version
 
