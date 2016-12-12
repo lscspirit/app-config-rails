@@ -36,10 +36,10 @@ APP_CONFIG = AppConfigLoader.load
 From this point onward, you can access your app config values through `APP_CONFIG`.
 
 ```ruby
-# when AppConfigLoader' env is not "production"
+# when AppConfigLoader's env is not "production"
 APP_CONFIG['some_service.host']  # => 'dev.someservice.com'
 
-# when AppConfigLoader' env is set to "production"
+# when AppConfigLoader's env is set to "production"
 APP_CONFIG['some_service.host']  # => 'prod.someservice.com'
 ```
 
