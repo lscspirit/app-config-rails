@@ -21,9 +21,9 @@ module AppConfigLoader
 
   def self.default_config
     cfg = AppConfigLoader::Config.new
-    cfg.env = Rails.env
-    cfg.config_paths <<   Rails.root.join('config', 'app_configs')
-    cfg.local_overrides = Rails.root.join('config', 'app_configs', 'local_overrides.yml')
+    cfg.env = defined?(Rails) ? Rails.env : 'development'
+    cfg.config_paths << (defined?(Rails) ? Rails.root.join('config', 'app_configs') : File.join(__dir__, 'app_configs'))
+    cfg.local_overrides = defined? (Rails) ? Rails.root.join('config', 'app_configs', 'local_overrides.yml') : File.join(__dir__, 'config', 'local_overrides.yml')
     cfg
   end
 end

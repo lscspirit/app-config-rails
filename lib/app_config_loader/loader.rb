@@ -1,3 +1,5 @@
+require 'erb'
+
 module AppConfigLoader
   class Loader
     def initialize(config)
@@ -45,7 +47,7 @@ module AppConfigLoader
     private
 
     def parse_yml(path)
-      @parser.parse ERB.new(File.read(path)).result
+      @parser.parse ::ERB.new(File.read(path)).result
     end
 
     # Expands the list of path entries into absolute paths for each matching files
