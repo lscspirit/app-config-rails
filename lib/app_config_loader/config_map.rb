@@ -5,18 +5,14 @@ module AppConfigLoader
     end
 
     def add(entry, overwrite = false)
-      begin
-        deep_add(@key_map, entry.key_components) do |existing|
-          if existing
-            # only override the existing entry if 'force' is true or
-            # the new entry has a higher specificity
-            overwrite || entry.specificity >= existing.specificity ? entry : existing
-          else
-            entry
-          end
+      deep_add(@key_map, entry.key_components) do |existing|
+        if existing
+          # only override the existing entry if 'force' is true or
+          # the new entry has a higher specificity
+          overwrite || entry.specificity >= existing.specificity ? entry : existing
+        else
+          entry
         end
-      rescue => ex
-        raise ConfigKeyConflict, "key conflict for '#{entry.key}': #{ex.message}"
       end
     end
 
@@ -47,15 +43,16 @@ module AppConfigLoader
     def deep_add(parent, keys, &block)
       current_key = keys[0].to_sym
 
+      val = parent[current_key]
+
       if keys.count == 1
-        val = parent[current_key]
 
         #
         # the last key
         #
 
         # check if the key has child configuration
-        raise "key '#{current_key}' has at least one child config" if val.is_a?(Hash)
+        raise ConfigKeyConflict, "key conflict: '#{current_key}' has at least one child config" if val.is_a?(Hash)
 
         # yield to the block to determine what value to assign to the key
         parent[current_key] = yield val
@@ -65,7 +62,7 @@ module AppConfigLoader
         #
 
         # check if the key already has a value assigned
-        raise "key '#{current_key}' already has a value assigned" unless val.nil? || val.is_a?(Hash)
+        raise ConfigKeyConflict, "key conflict: '#{current_key}' already has a value assigned" unless val.nil? || val.is_a?(Hash)
 
         # go to the next level
         val = (parent[current_key] ||= {})

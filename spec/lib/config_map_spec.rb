@@ -155,7 +155,7 @@ RSpec.describe AppConfigLoader::ConfigMap do
         let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.level_one', 'new_value' }
 
         it 'raises ConfigKeyConflict error' do
-          expect { call_add }.to raise_error(AppConfigLoader::ConfigKeyConflict)
+          expect { call_add }.to raise_error(AppConfigLoader::ConfigKeyConflict, /has at least one child/)
         end
       end
 
@@ -165,7 +165,7 @@ RSpec.describe AppConfigLoader::ConfigMap do
         let(:new_entry) { AppConfigLoader::ConfigEntry.new 'prod.level_one.level_two.level_three', 'new_value' }
 
         it 'raises ConfigKeyConflict error' do
-          expect { call_add }.to raise_error(AppConfigLoader::ConfigKeyConflict)
+          expect { call_add }.to raise_error(AppConfigLoader::ConfigKeyConflict, /already has a value assigned/)
         end
       end
     end
