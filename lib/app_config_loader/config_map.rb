@@ -1,5 +1,7 @@
 module AppConfigLoader
   class ConfigMap
+    include Enumerable
+
     def initialize
       @key_map = {}
     end
@@ -36,6 +38,10 @@ module AppConfigLoader
 
     def merge(config_map)
       config_map.to_a.each { |override| self.add override, true }
+    end
+
+    def each(&block)
+      self.to_a.each(&block)
     end
 
     private

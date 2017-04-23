@@ -1,5 +1,7 @@
 module AppConfigLoader
   class ConfigWithIndifferentAccess
+    include Enumerable
+
     def initialize(map, prefix = nil)
       @config_map = map
       @prefix     = prefix
@@ -21,5 +23,13 @@ module AppConfigLoader
       end
     end
     alias_method :[], :get
+
+    def to_a
+      @config_map.to_a
+    end
+
+    def each(&block)
+      @config_map.each(&block)
+    end
   end
 end
