@@ -1,6 +1,6 @@
 # AppConfigLoader
 
-A easy way to define application configurations using YAML in your Rails environment.
+A customizable YAML configuration library for Rails and Ruby, featuring wildcards, nesting, namespacing and local override. 
 
 ## Getting Started
 
@@ -24,15 +24,6 @@ Create a YAML file in the default directory `config/app_configs` to put your app
   'host': prod.someservice.com
 ```
 
-Create an initializer `config/initializers/00_app_config.rb` to configure and initialize AppConfigLoader. Typically, you would want AppConfigLoader to be the first thing to be initialized so that you can access your app config values in the remaining Rails initialization process. This is why the initializer filename has the '00_' prefix.
-
-
-```ruby
-# config/initializers/00_app_config.rb
-
-APP_CONFIG = AppConfigLoader.load
-```
-
 From this point onward, you can access your app config values through `APP_CONFIG`.
 
 ```ruby
@@ -43,25 +34,36 @@ APP_CONFIG['some_service.host']  # => 'dev.someservice.com'
 APP_CONFIG['some_service.host']  # => 'prod.someservice.com'
 ```
 
+### Non-Rails Environment
+
+When using `AppConfigLoader` outside of Rails, getting started is a little different:
+
+* the default app config file directory is `<pwd>/app_configs`
+* you need to manually initialize `AppConfigLoader` by including the following early on in your code:
+  ```ruby
+  AppConfigLoader.init
+  ```
+
 ## Configuration
 
 You can configure where and how AppConfigLoader load your app config file(s).
 
 ```ruby
-APP_CONFIG = AppConfigLoader.load do |config|
+AppConfigLoader.configure do |config|
   config.use_domain = true
   config.domain = 'us'
   config.config_paths << '/path/to/additional_config.yml'
 end
 ```
 
-Below is a list of all the settings available:
+Below is a list of all options available:
 
-* `config.env` - (String) app config environment. This determines which set of app config values to load. **Default:** `Rails.env`.
-* `config.use_domain` - (Boolean) whether the app config key uses a domain. **Default:** `false`.
+* `config.const_name` - (String) the name of the constant to which the config object is assigned. **Default:** `APP_CONFIG`
+* `config.env` - (String) app config environment. This determines which set of app config values to load. **Default:** Rails - `Rails.env`, non-Rails - `ENV['RACK_ENV'] || ENV['RUBY_ENV']`
+* `config.use_domain` - (Boolean) whether the app config key uses a domain. **Default:** `false`
 * `config.domain` - (String) app config domain. This determines which set of app config values to load. It is only applicable if `use_domain` is set to true. **Default:** `nil`
-* `config.config_paths` - (Array&lt;String&gt;) a list of paths from where app config YAML files should be loaded. Path can either be a file or a directory. With a directory path, all YAML files within that directory will be loaded. **Default:** `['<rails root>/config/app_configs']`.
-* `config.local_overrides` - (String) path to a local overrides app config file. Entries in this file take precedence over all values from other files. **Default:** `<rails root>/config/app_configs/local_overrides.yml`.
+* `config.config_paths` - (Array&lt;String&gt;) a list of paths from where app config YAML files should be loaded. Path can either be a file or a directory. With a directory path, all YAML files within that directory will be loaded. **Default:** Rails - `['<rails root>/config/app_configs']`, non-Rails - `['<pwd>/app_configs']`
+* `config.local_overrides` - (String) path to a local overrides app config file. Entries in this file take precedence over all values from other files. **Default:** Rails - `<rails root>/config/app_configs/local_overrides.yml`, non-Rails - `<pwd>/app_configs/local_overrides.yml`
 
 ## Defining your App Configs
 
@@ -72,7 +74,7 @@ All app configs are defined as key-value entries in YAML format. A app config va
 
 #### Basic Example
 
-```ruby
+```YAML
 # app config in YAML file
 'test.timeout': 3000
 'test.some_service.host': 'dev.someservice.com'
@@ -80,20 +82,27 @@ All app configs are defined as key-value entries in YAML format. A app config va
 'production.timeout': 500
 'production.some_service.host': 'prod.someservice.com'
 'production.some_service.port': 8000
+```
 
-# In Rails
-APP_CONFIG = AppConfigLoader.load do |config|
+```ruby
+# Rails initialization
+AppConfigLoader.configure do |config|
   config.env = 'test'
 end
 
+# after AppConfigLoader is initialized
 APP_CONFIG['timeout']             # => 3000
 APP_CONFIG['some_service.host']   # => dev.someservice.com
 APP_CONFIG['some_service.port']   # => nil
+```
 
-APP_CONFIG = AppConfigLoader.load do |config|
+```ruby
+# Rails initialization
+AppConfigLoader.configure do |config|
   config.env = 'production'
 end
 
+# after AppConfigLoader is initialized
 APP_CONFIG['timeout']             # => 500
 APP_CONFIG['some_service.host']   # => prod.someservice.com
 APP_CONFIG['some_service.port']   # => 8000
@@ -101,38 +110,45 @@ APP_CONFIG['some_service.port']   # => 8000
 
 #### Nested Definition
 
-```ruby
+```YAML
 'production.some_service':
   'host': 'prod.someservice.com'
   'port': 8000
-
-# In Rails
+```
+```ruby
 APP_CONFIG['some_service.host']   # => prod.someservice.com
 APP_CONFIG['some_service.port']   # => 8000
 ```
 
-#### Using Domain in Key
+#### Namespacing with Domain
 
-```ruby
+You may use `domain` to group your configuration. For example, you can provide different configuration when running in different regions.
+
+```YAML
 # app config in YAML file
 'production.us.some_service.host': 'prod.someservice.com'
 'production.hk.some_service.host': 'prod.someservice.com.hk'
-
-# In Rails
-APP_CONFIG = AppConfigLoader.load do |config|
+```
+```ruby
+# Rails initialization
+AppConfigLoader.configure do |config|
   config.env = 'production'
   config.use_domain = true
   config.domain     = 'us'
 end
 
+# after AppConfigLoader is initialized
 APP_CONFIG['some_service.host']   # => prod.someservice.com
-
-APP_CONFIG = AppConfigLoader.load do |config|
+```
+```ruby
+# Rails initialization
+AppConfigLoader.configure do |config|
   config.env = 'production'
   config.use_domain = true
   config.domain     = 'hk'
 end
 
+# after AppConfigLoader is initialized
 APP_CONFIG['some_service.host']   # => prod.someservice.com.hk
 ```
 
@@ -140,22 +156,27 @@ APP_CONFIG['some_service.host']   # => prod.someservice.com.hk
 
 You may use the wildcard `*` in place of the env and the domain. This allows you to specify app config entry that is applicable in any env or domain. An app config entry with a specific env or domain always takes precedence over ones with wildcard of the same key.
 
-```ruby
+```YAML
 # app config in YAML file
 '*.some_service.host': 'dev.someservice.com'
 'production.some_service.host': 'prod.someservice.com'
-
-# In Rails
-APP_CONFIG = AppConfigLoader.load do |config|
+```
+```ruby
+# Rails initialization
+AppConfigLoader.configure do |config|
   config.env = 'test'
 end
 
+# after AppConfigLoader is initialized
 APP_CONFIG['some_service.host']   # => dev.someservice.com
-
-APP_CONFIG = AppConfigLoader.load do |config|
+```
+```ruby
+# Rails initialization
+AppConfigLoader.configure do |config|
   config.env = 'production'
 end
 
+# after AppConfigLoader is initialized
 APP_CONFIG['some_service.host']   # => prod.someservice.com
 ```
 
@@ -169,6 +190,31 @@ When there a multiple app config entries for the same key, the final value is re
 'production.*.some_service.host': 'prod.someservice.com'
 '*.*.some_service.host': 'prod.someservice.com'               # lowest specificity
 ```
+
+### Key Conflict
+
+In most cases, entries belonging to or falling under the same key can be resolved by specificity. However, there are cases when the entries' values
+conflict with each other and a `ConfigKeyConflict` error will be raises. 
+
+* Assigning value to key with children
+
+  ```YAML
+  *.key_with_children.child_1: 'child1'
+  *.key_with_children.child_2: 'child2'
+  production.key_with_children: 'some value'
+
+  ```
+  The config above will raise `ConfigKeyConflict` error, regardless of the different in specificity. 
+  
+* Assigning children to key with value
+
+  ```YAML
+  production.key_with_value: 'some value'
+  *.key_with_value.child_1: 'child1'
+
+  ```
+  The config above will raise `ConfigKeyConflict` error, regardless of the different in specificity. 
+  
 
 ## Local Overrides File
 
