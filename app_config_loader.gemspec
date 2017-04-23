@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Derrick Yeung"]
   spec.email         = ["lscspirit@hotmail.com"]
 
-  spec.summary       = %q{Application configuration using YAML}
-  spec.description   = %q{A easy way to define application configurations using YAML in your Rails environment.}
+  spec.summary       = %q{Customizable YAML app config library}
+  spec.description   = %q{A customizable YAML configuration library for Rails and Ruby, featuring wildcards, nesting, namespacing and local override.}
   spec.homepage      = 'https://github.com/lscspirit/app_config_loader'
   spec.license       = "MIT"
 

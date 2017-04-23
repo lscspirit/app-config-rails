@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [v1.0.3](https://github.com/lscspirit/app_config_loader/tree/v1.0.3) (2017-04-23)
+[Full list of commits](https://github.com/lscspirit/app_config_loader/compare/v1.0.2...v1.0.3)
+
+- Auto-initialization through Railtie in Rails
+- Make ConfigEntry comparable
+- Make ConfigMap and ConfigWithIndifferentAccess enumerable.
+
 ## [v1.0.2](https://github.com/lscspirit/app_config_loader/tree/v1.0.2) (2017-04-23)
 [Full list of commits](https://github.com/lscspirit/app_config_loader/compare/v1.0.1...v1.0.2)
 
