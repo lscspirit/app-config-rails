@@ -46,7 +46,10 @@ When using `AppConfigLoader` outside of Rails, getting started is a little diffe
 
 ## Configuration
 
-You can configure where and how AppConfigLoader load your app config file(s).
+You can configure where and how AppConfigLoader load your app config file(s). 
+
+In Rails, the following code should be placed
+before Rails is initialized but after your Rails application is defined (e.g. `config/application.rb`). Outside Rails, this should be placed before the `AppConfigLoader.init` call. 
 
 ```ruby
 AppConfigLoader.configure do |config|
