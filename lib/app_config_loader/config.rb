@@ -1,6 +1,6 @@
 module AppConfigLoader
   class Config
-    attr_accessor :env, :domain, :local_overrides
+    attr_accessor :const_name, :env, :domain, :local_overrides
 
     def config_paths
       @config_paths ||= []
