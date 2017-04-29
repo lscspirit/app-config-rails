@@ -223,6 +223,21 @@ conflict with each other and a `ConfigKeyConflict` error will be raises.
 
 The local overrides file provides a quick way to override any entries defined in regular app config files. Entries within this file are resolved according to the specificity rule. Once resolved, the resolved entries will override any existing entries regardless of specificity. This is meant for development or testing purposes. Typically, you would not want to check this file into your source repository.
 
+## Manual Load
+
+Apart from initializing the module using `AppConfigLoader.init`, you may also manually parse and load app config. 
+
+```ruby
+config = AppConfigLoader::Config.new
+config.use_domain = true
+config.env = 'development'
+config.config_paths << '/path/to/app_config.yml'
+
+app_config = AppConfigLoader::load(config)
+app_config['some_config.key']   #=> config value for the 'some_config.key' key
+
+```
+
 ## Contributors
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/lscspirit/app_config_loader. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
