@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [v1.0.4](https://github.com/lscspirit/app_config_loader/tree/v1.0.4) (2017-04-30)
+[Full list of commits](https://github.com/lscspirit/app_config_loader/compare/v1.0.3...v1.0.4)
+
+- Auto-initialize in Rails 'db' tasks
+
 ## [v1.0.3](https://github.com/lscspirit/app_config_loader/tree/v1.0.3) (2017-04-23)
 [Full list of commits](https://github.com/lscspirit/app_config_loader/compare/v1.0.2...v1.0.3)
 
