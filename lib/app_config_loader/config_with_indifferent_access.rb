@@ -7,6 +7,15 @@ module AppConfigLoader
       @prefix     = prefix
     end
 
+    # Get value for a specified config key
+    #
+    # @param [String] key app config key
+    #
+    # @return the value for the key or another ConfigWithIndifferentAccess; nil if there is no value at the key
+    #
+    # @example Getting key value
+    #   app_config['some_service.host']      # => 'dev.someservice.com'
+    #   app_config.get('some_service.host')  # => 'dev.someservice.com'
     def get(key)
       # append prefix to the key if needed
       target_key = @prefix ? "#{@prefix}.#{key}" : key.to_s
