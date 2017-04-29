@@ -22,6 +22,12 @@ module AppConfigLoader
 
     raise NameError, "cannot assign app config because '#{cfg.const_name}' is already defined" if Object.const_defined?(cfg.const_name)
     Object.const_set cfg.const_name, self.load(cfg)
+
+    @inited = true
+  end
+
+  def self.initialized?
+    !!@inited
   end
 
   def self.load(config = nil)
