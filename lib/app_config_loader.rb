@@ -9,7 +9,11 @@ require 'app_config_loader/config_with_indifferent_access'
 require 'app_config_loader/railtie' if defined?(Rails)
 
 module AppConfigLoader
+  @cfg_blocks = []
+
   # Configure the module
+  #
+  # The block will be executed at during ::init
   #
   # @yield [config] configuration block
   # @yieldparam [AppConfigLoader::Config] config the config object
@@ -20,8 +24,8 @@ module AppConfigLoader
   #     config.domain = 'us'
   #     config.config_paths << '/path/to/app_config.yml'
   #   end
-  def self.configure
-    yield self.config if block_given?
+  def self.configure(&block)
+    @cfg_blocks << block if block_given?
   end
 
   # Initialize the module
@@ -29,10 +33,11 @@ module AppConfigLoader
   #
   # @raise [NameError] the constant has already been defined
   def self.init
+    self.run_config_blocks
     cfg = self.config
 
     raise NameError, "cannot assign app config because '#{cfg.const_name}' is already defined" if Object.const_defined?(cfg.const_name)
-    Object.const_set cfg.const_name, self.load(cfg)
+    Object.const_set cfg.const_name, self.load(self.config)
 
     @inited = true
   end
@@ -66,6 +71,13 @@ module AppConfigLoader
   end
 
   private
+
+  def self.run_config_blocks
+    @config = @cfg_blocks.reduce(self.config) do |cfg, cfg_block|
+      cfg_block.call cfg
+      cfg
+    end
+  end
 
   def self.config
     @config ||= self.default_config
