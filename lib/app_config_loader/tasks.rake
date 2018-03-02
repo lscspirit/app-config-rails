@@ -5,5 +5,7 @@ namespace :app_config_loader do
   end
 end
 
-# initialize the module before db:load_config task so that app config is available for all 'db' tasks
-Rake::Task['db:load_config'].enhance %w(app_config_loader:init)
+if Rake::Task.task_defined? 'db:load_config'
+  # initialize the module before db:load_config task so that app config is available for all 'db' tasks
+  Rake::Task['db:load_config'].enhance %w(app_config_loader:init)
+end
