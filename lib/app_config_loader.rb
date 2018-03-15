@@ -1,11 +1,4 @@
-require 'app_config_loader/errors'
-require 'app_config_loader/config'
 require 'app_config_loader/loader'
-require 'app_config_loader/parser'
-require 'app_config_loader/config_entry'
-require 'app_config_loader/config_map'
-require 'app_config_loader/config_with_indifferent_access'
-
 require 'app_config_loader/railtie' if defined?(Rails)
 
 module AppConfigLoader

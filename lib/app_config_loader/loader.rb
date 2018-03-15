@@ -1,5 +1,12 @@
 require 'erb'
 
+require 'app_config_loader/errors'
+require 'app_config_loader/config'
+require 'app_config_loader/parser'
+require 'app_config_loader/config_entry'
+require 'app_config_loader/config_map'
+require 'app_config_loader/config_with_indifferent_access'
+
 module AppConfigLoader
   class Loader
     def initialize(config)
